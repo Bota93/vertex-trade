@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# Vertex Trade 🛒
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una demo funcional de una aplicación de e-commerce moderna, construida con una arquitectura full-stack y serverless.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Demo en Vivo
 
-## React Compiler
+**[➡️ Ver la aplicación funcionando aquí](https://URL-DE-TU-PROYECTO.com)**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*(Nota: El enlace estará disponible una vez que el proyecto sea desplegado.)*
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 💡 Concepto del Proyecto
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**Vertex Trade** es un proyecto de portfolio diseñado para simular una experiencia de compra online completa. El objetivo principal es demostrar la habilidad para construir una interfaz de usuario interactiva y conectarla a servicios de backend modernos (BaaS), gestionando datos, usuarios y pagos de forma segura y eficiente.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 📋 Funcionalidades Principales
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+* **Catálogo de Productos Dinámico:** Los productos se cargan directamente desde una base de datos PostgreSQL y se muestran en una interfaz limpia y responsiva.
+* **Autenticación de Usuarios:** Sistema completo de registro e inicio de sesión gestionado a través de **Supabase Auth**.
+* **Carrito de la Compra:** Los usuarios pueden añadir, eliminar y modificar la cantidad de productos en su carrito, con un estado que se gestiona en tiempo real en el cliente.
+* **Pasarela de Pago Segura:** El proceso de pago se simula de forma segura. El frontend nunca tiene acceso a claves secretas; en su lugar, invoca una **Edge Function** (serverless) que se comunica con la API de **Stripe**.
+* **(Próximamente)** Panel de usuario para consultar el historial de pedidos.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🏗️ Arquitectura y Stack Tecnológico
+
+La arquitectura de este proyecto es serverless, lo que significa que no dependemos de un servidor tradicional. Esto agiliza el desarrollo y mejora la escalabilidad.
+
+`[Usuario] <--> [React App (Frontend)] <--> [Supabase (BaaS)]`
+
+`[React App] --> [Edge Function (para pagos)] --> [API de Stripe]`
+
+* **Frontend:** **React** con **TypeScript** y **Vite**.
+    * *¿Por qué?* React para una UI declarativa y basada en componentes. TypeScript para añadir seguridad de tipos y prevenir errores en el desarrollo. Vite por su increíble velocidad.
+* **Backend as a Service (BaaS):** **Supabase**.
+    * *¿Por qué?* Supabase proporciona la base de datos PostgreSQL, el sistema de autenticación y APIs auto-generadas. Esto permite centrarse en el desarrollo del frontend sin tener que construir un backend desde cero.
+* **Pagos Seguros:** **Stripe** + **Supabase Edge Functions**.
+    * *¿Por qué?* Para mantener la máxima seguridad, la clave secreta de Stripe se almacena y utiliza exclusivamente dentro de una función serverless. El frontend solo recibe un token temporal y seguro para procesar el pago.
+
+---
+
+## 📸 Galería del Proyecto
+
+---
+
+## 👨‍💻 Autor
+
+**Adrián Alcaraz Rodríguez**
+* **GitHub:** `https://github.com/Bota93`
+* **LinkedIn:** `https://www.linkedin.com/in/adrianalcarazrodriguez/`
