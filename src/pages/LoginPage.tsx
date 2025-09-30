@@ -1,20 +1,48 @@
+/**
+ * @file LoginPage.tsx
+ * @description Componente que renderiza la página de inicio de sesión.
+ * Ofrece dos métodos de autenticación: un formulario manual y un botón de acceso rápido para un usuario de demostración.
+ * @author Bota93
+ * @date 2025-09-30
+ */
+
+// --- Importaciones de Librerías y Componentes ---
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 
+/**
+ * Componente funcional para la página de inicio de sesión.
+ * Maneja el estado del formulario y dos flujos de autenticación distintos.
+ * @returns {JSX.Element} El formulario de inicio de sesión.
+ */
 function LoginPage() {
-    // Mantenemos los estados por si alguien quiere iniciar sesión manualmente
+    /**
+     * @state email
+     * @description Almacena el valor del campo de email para el login manual.
+     */
     const [email, setEmail] = useState('');
+    /**
+     * @state password
+     * @description Almacena el valor del campo de contraseña para el login manual.
+     */
     const [password, setPassword] = useState('');
-
+    /**
+     * @state error
+     * @description Almacena mensajes de feedback (éxito o error) para el usuario.
+     */
     const [error, setError] = useState('');
 
     /**
-     * Maneja el envío del formulario de inicio de sesión manual.
+     * @async
+     * @function handleLogin
+     * @description Manejador para el envío del formulario de login manual.
+     * @param {React.FormEvent<HTMLFormElement>} e - El evento del formulario.
      */
     async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError('');
 
+        // Intenta iniciar sesión con los datos proporcionados en el formulario.
         const { error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
@@ -28,15 +56,18 @@ function LoginPage() {
     }
 
     /**
-     * Inicia sesión automáticamente con las credenciales del usuario de demostración.
+     * @async
+     * @function handleDemoLogin
+     * @description Manejador para el botón de "Usuario Demo".
+     * Inicia sesión con credenciales predefinidas para facilitar la prueba de la aplicación.
      */
     async function handleDemoLogin() {
         setError('');
 
-        // Usamos las credenciales que creamos manualmente en Supabase
+        // Usa credenciales hardcodeadas del usuario de demostración.
         const { error } = await supabase.auth.signInWithPassword({
             email: 'demo@ejemplo.com',
-            password: 'password123', // La contraseña que establecimos
+            password: 'password123',
         });
 
         if (error) {
@@ -54,7 +85,7 @@ function LoginPage() {
                     onSubmit={handleLogin}
                     className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
                 >
-                    {/* El formulario manual se queda igual */}
+                    {/* Sección de inputs para el login manual */}
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                             Correo Electrónico
@@ -81,6 +112,7 @@ function LoginPage() {
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
+                    {/* Sección de botones de acción */}
                     <div className="flex flex-col gap-4">
                         <button
                             type="submit"
@@ -88,9 +120,8 @@ function LoginPage() {
                         >
                             Entrar
                         </button>
-                        {/* 👇 BOTÓN NUEVO PARA EL USUARIO DEMO 👇 */}
                         <button
-                            type="button" // Importante que sea "button" para no enviar el formulario
+                            type="button" // 'type="button"' evita que este botón envíe el formulario.
                             onClick={handleDemoLogin}
                             className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                         >
@@ -98,6 +129,7 @@ function LoginPage() {
                         </button>
                     </div>
                 </form>
+                {/* Mensaje de feedback para el usuario */}
                 {error && <p className="text-center text-red-500 text-sm">{error}</p>}
             </div>
         </div>

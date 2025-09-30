@@ -1,22 +1,49 @@
-import { useState } from 'react';
+/**
+ * @file RegisterPage.tsx
+ * @description Componente que renderiza la página de registro de usuarios.
+ * Contiene un formulario para que los nuevos usuarios creen una cuenta.
+ * @author Bota93
+ * @date 2025-09-30
+ */
+
+// --- Importaciones de Librerías y Componentes ---
+import React, { useState } from 'react'; // Se importa React para el tipado de eventos.
 import { supabase } from '../supabaseClient';
 
+/**
+ * Componente funcional para la página de registro.
+ * Maneja el estado del formulario y la comunicación con Supabase Auth para crear nuevos usuarios.
+ * @returns {JSX.Element} El formulario de registro.
+ */
 function RegisterPage() {
-    // Estados para guardar los valores de los inputs
+    /**
+     * @state email
+     * @description Almacena el valor del campo de entrada del correo electrónico.
+     */
     const [email, setEmail] = useState('');
+    /**
+     * @state password
+     * @description Almacena el valor del campo de entrada de la contraseña.
+     */
     const [password, setPassword] = useState('');
-
-    // Estado para mostrar mensajes al usuario (éxito o error)
+    /**
+     * @state message
+     * @description Almacena mensajes de feedback para el usuario (éxito o error en el registro).
+     */
     const [message, setMessage] = useState('');
 
     /**
-     * Maneja el envío del formulario de registro.
+     * @async
+     * @function handleRegister
+     * @description Manejador de eventos para el envío del formulario.
+     * Llama al método `signUp` de Supabase y actualiza el estado `message` con el resultado.
+     * @param {React.FormEvent<HTMLFormElement>} e - El evento del formulario.
      */
     async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault(); // Evita que la página se recargue al enviar el formulario
-        setMessage(''); // Limpia mensajes anteriores
+        e.preventDefault(); // Evita la recarga de la página.
+        setMessage(''); // Resetea mensajes previos.
 
-        // Llama a la función de registro de Supabase Auth
+        // Intenta registrar al usuario con el email y la contraseña proporcionados.
         const { data, error } = await supabase.auth.signUp({
             email: email,
             password: password,
@@ -29,6 +56,7 @@ function RegisterPage() {
         }
     }
 
+    // Renderiza el formulario de registro.
     return (
         <div className="container mx-auto p-4 flex justify-center">
             <div className="w-full max-w-md">
@@ -37,6 +65,7 @@ function RegisterPage() {
                     onSubmit={handleRegister}
                     className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
                 >
+                    {/* Campo de Email */}
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                             Correo Electrónico
@@ -51,6 +80,7 @@ function RegisterPage() {
                             required
                         />
                     </div>
+                    {/* Campo de Contraseña */}
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                             Contraseña
@@ -65,6 +95,7 @@ function RegisterPage() {
                             required
                         />
                     </div>
+                    {/* Botón de envío */}
                     <div className="flex items-center justify-between">
                         <button
                             type="submit"
@@ -74,7 +105,7 @@ function RegisterPage() {
                         </button>
                     </div>
                 </form>
-                {/* Muestra el mensaje de éxito o error */}
+                {/* Renderizado condicional del mensaje de feedback */}
                 {message && <p className="text-center text-gray-600 text-sm">{message}</p>}
             </div>
         </div>
