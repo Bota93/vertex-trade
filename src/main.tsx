@@ -1,40 +1,63 @@
 /**
- * @file App.tsx
- * @description Componente de layout principal de la aplicación Vertex Trade.
- * Renderiza los elementos comunes a todas las páginas, como la cabecera,
- * y proporciona un punto de anclaje para que el router renderice las páginas hijas.
+ * @file main.tsx
+ * @description Punto de entrada principal y configuración del enrutador para la aplicación Vertex Trade.
+ * Este archivo se encarga de inicializar React, definir la estructura de navegación de la aplicación
+ * y montar el componente raíz en el DOM.
  * @author Tu Nombre
  * @date 2025-09-28
  */
 
-// --- Importaciones de Librerías y Componentes ---
-import { Outlet } from 'react-router-dom'; // Componente clave para renderizar rutas anidadas.
-import './index.css'; // Asegura que los estilos globales de Tailwind se apliquen.
+// --- Importaciones de Librerías ---
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+// --- Importaciones de Estilos y Componentes ---
+import './index.css'; // Estilos globales y directivas de Tailwind CSS.
+
+// Componente "Layout" que contiene la estructura compartida (ej: cabecera).
+import App from './App.tsx';
+// Componentes que representan cada una de las páginas de la aplicación.
+import HomePage from './pages/HomePage.tsx';
+import LoginPage from './pages/LoginPage.tsx';
+import RegisterPage from './pages/RegisterPage.tsx';
 
 /**
- * Componente que actúa como la plantilla o layout principal de la aplicación.
- * Su estructura envuelve a todas las páginas individuales.
- * @returns {JSX.Element} El layout con la cabecera y el contenido de la ruta actual.
+ * @const router
+ * @description Configuración de las rutas de la aplicación utilizando `createBrowserRouter`.
+ * Se define una estructura de rutas anidadas donde:
+ * - `App` actúa como el componente "padre" o "layout" para la ruta raíz (`/`).
+ * - Las rutas `children` (HomePage, LoginPage, etc.) se renderizarán dentro del componente `App`,
+ * en el lugar que ocupe el componente `<Outlet />`.
  */
-function App() {
-  return (
-    <div className="bg-gray-100 min-h-screen">
-      <header className="bg-white shadow-md">
-        <div className="container mx-auto p-4">
-          <h1 className="text-3xl font-bold text-gray-800">Vertex Trade</h1>
-        </div>
-      </header>
-      <main>
-        {/**
-         * @component Outlet
-         * @description Este componente de `react-router-dom` actúa como un marcador de posición.
-         * En este lugar, el router renderizará el componente de la ruta hija que esté activa.
-         * (Ej: HomePage, LoginPage, etc.).
-         */}
-        <Outlet />
-      </main>
-    </div>
-  );
-}
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />, // El layout principal se renderiza para todas las rutas hijas.
+    children: [
+      {
+        index: true, // `index: true` designa esta como la ruta por defecto para el path padre ("/").
+        element: <HomePage />
+      },
+      {
+        path: 'login', // Se renderizará en la URL "/login".
+        element: <LoginPage />
+      },
+      {
+        path: 'register', // Se renderizará en la URL "/register".
+        element: <RegisterPage />
+      },
+    ],
+  },
+]);
 
-export default App;
+/**
+ * Monta la aplicación en el elemento del DOM con el id 'root'.
+ * - `React.StrictMode` es un wrapper que ayuda a detectar problemas potenciales en la app.
+ * - `RouterProvider` es el componente que provee la configuración del router a toda la aplicación.
+ */
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>,
+);
